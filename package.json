@@ -1,0 +1,38 @@
+{
+  "name": "nim-web-chatroom",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kit48/nim-web-chatroom.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kit48/nim-web-chatroom/issues"
+  },
+  "homepage": "https://github.com/kit48/nim-web-chatroom#readme",
+  "jest": {
+    "preset": "ts-jest",
+    "coverageThreshold": {
+      "global": {
+        "statements": 100,
+        "branches": 100,
+        "functions": 100,
+        "lines": 100
+      }
+    }
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.10",
+    "father": "^2.29.7",
+    "ject": "^1.1.0",
+    "jest": "^26.4.2",
+    "ts-jest": "^26.2.0",
+    "typescript": "^4.0.2"
+  }
+}
