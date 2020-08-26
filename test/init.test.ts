@@ -3,11 +3,6 @@ import config from './config.json';
 
 function listenChatroom(duration: number = 5) {
   return new Promise((res) => {
-    const timer = window.setTimeout(() => {
-      chatroom.disconnect();
-      res();
-    }, duration * 1000);
-
     const chatroom = new Chatroom({
       appKey: '632feff1f4c838541ab75195d1ceb3fa',
       account: config.token,
@@ -15,11 +10,10 @@ function listenChatroom(duration: number = 5) {
       chatroomId: config.chatroomId,
       chatroomAddresses: ['chatweblink01.netease.im:443'],
 
-      onconnect: (chatroomInfo: any) => {
+      onconnect: (chatroomInfo) => {
         console.log('进入聊天室', chatroomInfo);
       },
-      onerror: (error: any, obj: any) => {
-        window.clearTimeout(timer);
+      onerror: (error, obj) => {
         console.log('发生错误', error, obj);
       },
       onwillreconnect: (obj: any) => {
@@ -27,8 +21,6 @@ function listenChatroom(duration: number = 5) {
         console.log('即将重连', obj);
       },
       ondisconnect: (error: any) => {
-        window.clearTimeout(timer);
-
         // 此时说明 `SDK` 处于断开状态, 开发者此时应该根据错误码提示相应的错误信息, 并且跳转到登录页面
         console.log('连接断开', error);
         if (error) {
@@ -45,7 +37,7 @@ function listenChatroom(duration: number = 5) {
         }
       },
       // 消息
-      onmsgs: (msgs: any) => {
+      onmsgs: (msgs) => {
         console.log('收到聊天室消息', msgs);
       },
     });

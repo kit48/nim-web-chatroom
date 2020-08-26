@@ -1,0 +1,281 @@
+export interface NIMError {
+  message: string;
+  code: number;
+  event: Object;
+}
+
+export interface ChatroomInfo {
+  /**
+   * 聊天室 id
+   */
+  id: string;
+  /**
+   * 聊天室名字
+   */
+  name: string;
+
+  /**
+   * 聊天室公告
+   */
+  announcement: string;
+
+  /**
+   * 直播地址
+   */
+  broadcastUrl: string;
+
+  /**
+   * 第三方扩展字段
+   */
+  custom: string;
+
+  /**
+   * 创建时间
+   */
+  createTime: number;
+
+  /**
+   * 更新时间
+   */
+  updateTime: number;
+
+  /**
+   * 创建者账号
+   */
+  creator: string;
+
+  /**
+   * 当前在线人数
+   */
+  onlineMemberNum: sumber;
+
+  /**
+   * 是否禁言, 禁言状态下普通成员不能发送消息, 创建者和管理员可以发送消息
+   */
+  mute: soolean;
+}
+
+export interface GetInstanceOptions {
+  /**
+   * secure 模式下会通过 https 协议跟服务器建立连接, 非 secure 模式下会通过 http 协议跟服务器建立连接, 默认 true
+   */
+  secure?: boolean | Object;
+
+  /**
+   * 在云信管理后台查看应用的 appKey
+   */
+  appKey: string;
+
+  /**
+   * 帐号, 应用内唯一
+   */
+  account: string;
+
+  /**
+   * 帐号的 token, 用于建立连接
+   */
+  token: string;
+
+  /**
+   * 聊天室 id
+   */
+  chatroomId: string;
+
+  /**
+   * 聊天室地址列表
+   */
+  chatroomAddresses: string[];
+
+  /**
+   * nos文件存储全局配置，存储场景，实例有效，默认 chatroom
+   */
+  nosScenes?: string;
+
+  /**
+   * nos文件存储全局配置，存储有效时间，实例有效，默认 Infinity ，不得小于一天，单位秒
+   */
+  nosSurvivalTime?: number;
+
+  /**
+   * 进入聊天室后展示的昵称, 如果不设置并且托管了用户资料, 那么使用用户资料里面的昵称
+   */
+  chatroomNick?: string;
+
+  /**
+   * 进入聊天室后展示的头像, 如果不设置并且托管了用户资料, 那么使用用户资料里面的头像
+   */
+  chatroomAvatar?: string;
+
+  /**
+   * 扩展字段, 设置了之后, 通过 getChatroomMembers 获取的聊天室成员信息会包含此字段
+   *
+   * - 推荐使用 JSON 格式构建, 非 JSON 格式的话, Web 端会正常接收, 但是会被其它端丢弃
+   */
+  chatroomCustom?: string;
+
+  /**
+   * 扩展字段, 如果填了, 那么其它聊天室成员收到的聊天室通知消息的 attach.custom 的值为此字段
+   *
+   * - 推荐使用JSON格式构建, 非JSON格式的话, Web端会正常接收, 但是会被其它端丢弃
+   */
+  chatroomEnterCustom?: string;
+
+  /**
+   * 连接建立后的回调, 会传入聊天室信息
+   */
+  onconnect?: (chatroomInfo: ChatroomInfo) => void;
+
+  /**
+   * 即将重连的回调
+   *
+   * - 此时说明 SDK 已经断开连接, 请开发者在界面上提示用户连接已断开, 而且正在重新建立连接
+   * - 此回调会收到一个对象, 包含额外的信息, 有以下字段
+   *    - duration: 距离下次重连的时间
+   *    - retryCount: 重连尝试的次数
+   */
+  onwillreconnect?: function;
+
+  /**
+   * SDK尝试重连的最大次数，超过后则不再尝试重连，并触发 ondisconnect 回调
+   */
+  reconnectionAttempts?: number;
+
+  /**
+   * 断开连接后的回调
+   * - 此时说明 SDK 处于断开状态, 开发者此时应该根据错误码提示相应的错误信息, 并且跳转到登录页面
+   * - 此回调会收到一个对象, 包含错误的信息, 有以下字段
+   *    - code: 出错时的错误码, 可能为空
+   *      - 302: 账号或者密码错误
+   *      - 'kicked': 被踢
+   * - 当 code 为 'kicked' 的时候, 此对象会有以下字段
+   *    - reason: 被踢的原因
+   *      - chatroomClosed: 聊天室关闭了
+   *      - managerKick: 被管理员踢出
+   *      - samePlatformKick: 不允许同一个帐号重复登录同一个聊天室
+   *    - message: 文字描述的被踢的原因
+   */
+  ondisconnect?: function;
+
+  /**
+   * 发生错误的回调, 会传入错误对象
+   */
+  onerror?: (error: NIMError, object: any) => void;
+
+  /**
+   * 收到消息的回调, 会传入消息数组
+   */
+  onmsgs?: (msgs: Message[]) => void;
+}
+
+export interface Message {
+  /**
+   * 聊天室 ID
+   */
+  chatroomId: string;
+
+  /**
+   * SDK生成的消息id, 在发送消息之后会返回给开发者, 开发者可以在发送消息的结果回调里面根据这个ID来判断相应消息的发送状态, 到底是发送成功了还是发送失败了, 然后根据此状态来更新页面的UI。如果发送失败, 那么可以重新发送此消息
+   */
+  idClient: string;
+
+  /**
+   * 消息发送方, 帐号
+   */
+  from: string;
+
+  /**
+   * 消息发送方的昵称
+   */
+  fromNick: string;
+
+  /**
+   * 消息发送方的头像
+   */
+  fromAvatar: string;
+
+  /**
+   * 消息发送方的扩展字段
+   */
+  fromCustom: string;
+
+  /**
+   * 发送方的设备类型
+   */
+  fromClientType: string;
+
+  /**
+   * 消息类型
+   */
+  type: string;
+
+  /**
+   * 消息的流向
+   *
+   * - 'in'表示此消息是收到的消息
+   * - 'out'表示此消息是发出的消息
+   */
+  flow: string;
+
+  /**
+   * 是否跳过存云端历史, false: 不跳过,true: 跳过存历史,默认 false
+   */
+  skipHistory?: boolean;
+
+  /**
+   * 文本消息的文本内容, 请参考发送聊天室文本消息
+   */
+  text?: string;
+
+  /**
+   * 文件消息的文件对象, 具体字段请参考图片对象、音频对象、视频对象和文件对象, 请参考发送聊天室文件消息
+   */
+  file?: object;
+
+  /**
+   * 地理位置消息的地理位置对象, 请参考发送聊天室地理位置消息
+   */
+  geo?: object;
+
+  /**
+   * 提醒消息的内容, 请参考发送聊天室提醒消息
+   */
+  tip?: string;
+
+  /**
+   * 自定义消息的消息内容, 开发者可以自行扩展, 建议封装成JSON格式字符串, 请参考发送聊天室自定义消息
+   */
+  content?: string;
+
+  /**
+   * 聊天室通知消息的附加信息,
+   */
+  attach?: object;
+
+  参考聊天室通知消息的类型来查看详细解释;
+  /**
+   * 扩展字段
+   *
+   * - 推荐使用 JSON 格式构建, 非 JSON 格式的话, Web 端会正常接收, 但是会被其它端丢弃
+   */
+  custom?: string;
+
+  /**
+   * 是否是重发的消息
+   */
+  resend: boolean;
+
+  /**
+   * 时间戳
+   */
+  time: number;
+
+  /**
+   * 服务器第三方回调的扩展字段
+   */
+  callbackExt: string;
+
+  /**
+   * 开发者自定义的消息子类型，格式为大于0的整数
+   */
+  subType: number;
+}
