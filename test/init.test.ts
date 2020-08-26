@@ -1,8 +1,8 @@
 import Chatroom from '../src';
 import config from './config.json';
 
-function listenChatroom(duration: number = 5) {
-  return new Promise((res) => {
+function listenChatroom() {
+  return new Promise((res, rej) => {
     const chatroom = new Chatroom({
       appKey: '632feff1f4c838541ab75195d1ceb3fa',
       account: config.token,
@@ -12,9 +12,15 @@ function listenChatroom(duration: number = 5) {
 
       onconnect: (chatroomInfo) => {
         console.log('进入聊天室', chatroomInfo);
+
+        chatroom.disconnect();
+        res();
       },
       onerror: (error, obj) => {
         console.log('发生错误', error, obj);
+
+        chatroom.disconnect();
+        rej();
       },
       onwillreconnect: (obj: any) => {
         // 此时说明 `SDK` 已经断开连接, 请开发者在界面上提示用户连接已断开, 而且正在重新建立连接
