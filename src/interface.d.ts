@@ -123,7 +123,7 @@ export interface GetInstanceOptions {
   /**
    * 连接建立后的回调, 会传入聊天室信息
    */
-  onconnect?: (chatroomInfo: ChatroomInfo) => void;
+  onconnect?: (data: { chatroom: ChatroomInfo; member: ChatroomMember }) => void;
 
   /**
    * 即将重连的回调
@@ -407,5 +407,5 @@ export interface GetChatroomMembersOptions {
   /**
    * 结果回调函数, 成功时会额外附上聊天室成员信息列表
    */
-  done: (error, obj: { members: ChatroomMember[] }) => void;
+  done: (error: NIMError, obj: { members: ChatroomMember[] }) => void;
 }

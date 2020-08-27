@@ -1,4 +1,4 @@
-import { GetInstanceOptions, Message, ChatroomInfo, GetChatroomMembersOptions } from './interface';
+import { GetInstanceOptions, Message, ChatroomInfo, GetChatroomMembersOptions, NIMError } from './interface';
 
 export default class Chatroom {
   /**
@@ -41,14 +41,14 @@ export default class Chatroom {
    *
    * @param options
    */
-  drop(options: { done: (error, obj, content) => void });
+  drop(options: { done: (error: NIMError, obj, content) => void });
 
   /**
    * 获取聊天室信息
    *
    * @param options
    */
-  getChatroom(options: { done: (error, chatroomInfo: ChatroomInfo) => void });
+  getChatroom(options: { done: (error: NIMError, chatroomInfo: ChatroomInfo) => void });
 
   /**
    * 获取聊天室成员列表
