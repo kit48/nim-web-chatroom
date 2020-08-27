@@ -14,11 +14,20 @@ function listenChatroom() {
     const chatroom = new Chatroom({
       ...baseInitOptions,
 
-      onconnect: (chatroomInfo) => {
-        console.log('进入聊天室', chatroomInfo);
+      onconnect: (data) => {
+        console.log('进入聊天室:');
+        console.log('chatroom', data.chatroom);
+        console.log('member', data.member);
 
-        chatroom.disconnect();
-        res();
+        chatroom.getChatroomMembers({
+          guest: false,
+          done: (error, data) => {
+            console.log('获取聊天室成员' + (!error ? '成功' : '失败'), error, data.members);
+
+            chatroom.disconnect();
+            res();
+          },
+        });
       },
       onerror: (error, obj) => {
         console.log('发生错误', error, obj);
