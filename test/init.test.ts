@@ -1,14 +1,18 @@
 import Chatroom from '../src';
 import config from './config.json';
 
+export const baseInitOptions = {
+  appKey: '632feff1f4c838541ab75195d1ceb3fa',
+  account: config.token,
+  token: config.token,
+  chatroomId: config.chatroomId,
+  chatroomAddresses: ['chatweblink01.netease.im:443'],
+};
+
 function listenChatroom() {
   return new Promise((res, rej) => {
     const chatroom = new Chatroom({
-      appKey: '632feff1f4c838541ab75195d1ceb3fa',
-      account: config.token,
-      token: config.token,
-      chatroomId: config.chatroomId,
-      chatroomAddresses: ['chatweblink01.netease.im:443'],
+      ...baseInitOptions,
 
       onconnect: (chatroomInfo) => {
         console.log('进入聊天室', chatroomInfo);
