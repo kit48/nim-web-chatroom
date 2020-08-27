@@ -279,3 +279,133 @@ export interface Message {
    */
   subType: number;
 }
+
+export interface ChatroomMember {
+  /**
+   * 聊天室 ID
+   */
+  chatroomId: string;
+
+  /**
+   * 账号
+   */
+  account: string;
+
+  /**
+   * 聊天室内的昵称
+   */
+  nick: string;
+
+  /**
+   * 聊天室内的头像
+   */
+  avatar: string;
+
+  /**
+   * 聊天室成员类型。聊天室成员分为固定成员和游客两种。固定成员又分为房主、管理员、普通成员和受限成员四种。禁言用户和拉黑用户都属于受限用户。
+   *
+   * - 'owner' (房主)
+   * - 'manager' (管理员)
+   * - 'restricted' (受限制, 被拉黑或者禁言)
+   * - 'unset' (未设置)
+   * - 'common' (普通成员)
+   * - 'guest' (游客)
+   * - 'anonymous' (匿名非注册用户，非云信注册用户)
+   */
+  type: 'owner' | 'manager' | 'restricted' | 'unset' | 'common' | 'guest' | 'anonymous';
+
+  /**
+   * 是否是游客
+   */
+  guest: string;
+
+  /**
+   * 是否被拉黑
+   */
+  blacked: string;
+
+  /**
+   * 是否被禁言
+   */
+  gaged: string;
+
+  /**
+   * 级别
+   */
+  level: number;
+
+  /**
+   * 是否在线, 只有固定成员才能离线, 对游客而言只能是在线
+   */
+  online: boolean;
+
+  /**
+   * 进入聊天室的时间, 如果离线, 无该字段
+   */
+  enterTime: number;
+
+  /**
+   * 第三方扩展字段
+   */
+  custom: string;
+
+  /**
+   * 更新时间
+   */
+  updateTime: number;
+
+  /**
+   * 是否被临时禁言
+   */
+  tempMuted: boolean;
+
+  /**
+   * 临时禁言剩余时长
+   */
+  tempMuteDuration: number;
+}
+
+export interface GetChatroomMembersOptions {
+  /**
+   * true表示获取游客, false表示获取非游客成员
+   *
+   * - true 为获取游客列表，默认按加入加入聊天室时间倒序排列
+   * - false 为获取非游客（即固定成员）列表，按照成为固定成员的时间倒序排列，默认获取所有（包括不在线的）固定成员
+   */
+  guest: boolean;
+
+  /**
+   * 对 guest=true 时生效
+   *
+   * - true 为加入聊天室时间降序排列（即加入时间晚的排前面）
+   * - false 为加入聊天室时间升序排列（即加入时间晚的排后面）
+   */
+  desc?: boolean;
+
+  /**
+   * 对 guest=false 时生效
+   *
+   * - true 只获取在线的固定成员
+   * - false 获取所有（包括不在线的）固定成员
+   */
+  onlyOnline?: boolean;
+
+  /**
+   * 分页用, 查找该时间戳之前的成员
+   *
+   * - 默认 0 代表当前服务器时间
+   * - 获取游客时, 此字段填上次获取的最后一个游客的 enterTime
+   * - 获取非游客时, 此字段填上次获取的最后一个非游客的 updateTime
+   */
+  time?: number;
+
+  /**
+   * 分页用, 默认 100
+   */
+  limit?: number;
+
+  /**
+   * 结果回调函数, 成功时会额外附上聊天室成员信息列表
+   */
+  done: (error, obj: { members: ChatroomMember[] }) => void;
+}
