@@ -403,9 +403,11 @@ export interface GetChatroomMembersOptions {
    * 分页用, 默认 100
    */
   limit?: number;
+}
 
+export interface GetChatroomMembersInfoOptions {
   /**
-   * 结果回调函数, 成功时会额外附上聊天室成员信息列表
+   * 待查询的账号列表, 每次最多20个
    */
-  done: (error: NIMError, obj: { members: ChatroomMember[] }) => void;
+  accounts: string[];
 }

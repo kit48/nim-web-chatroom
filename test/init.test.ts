@@ -9,24 +9,40 @@ export const baseInitOptions = {
   chatroomAddresses: ['chatweblink01.netease.im:443'],
 };
 
+const handleConnect = async (chatroom: Chatroom, data: any) => {
+  console.log('进入聊天室:');
+  console.log('chatroom', data.chatroom);
+  console.log('member', data.member);
+
+  try {
+    const data = await chatroom.getChatroomMembers({
+      guest: false,
+    });
+    console.log('获取聊天室成员成功', data);
+  } catch (error) {
+    console.log('获取聊天室成员失败', error);
+  }
+
+  try {
+    const data = await chatroom.getChatroomMembersInfo({
+      accounts: [config.account],
+    });
+    console.log('获取聊天室成员信息成功', data);
+  } catch (error) {
+    console.log('获取聊天室成员信息失败', error);
+  }
+};
+
 function listenChatroom() {
   return new Promise((res, rej) => {
+    console.log('Init Chatroom...');
     const chatroom = new Chatroom({
       ...baseInitOptions,
 
       onconnect: (data) => {
-        console.log('进入聊天室:');
-        console.log('chatroom', data.chatroom);
-        console.log('member', data.member);
-
-        chatroom.getChatroomMembers({
-          guest: false,
-          done: (error, data) => {
-            console.log('获取聊天室成员' + (!error ? '成功' : '失败'), error, data.members);
-
-            chatroom.disconnect();
-            res();
-          },
+        handleConnect(chatroom, data).finally(() => {
+          chatroom.disconnect();
+          res();
         });
       },
       onerror: (error, obj) => {
