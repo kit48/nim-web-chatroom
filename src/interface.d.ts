@@ -405,9 +405,20 @@ export interface GetChatroomMembersOptions {
   limit?: number;
 }
 
+export interface GetChatroomMembersResult {
+  members: ChatroomMember[];
+}
+
 export interface GetChatroomMembersInfoOptions {
   /**
    * 待查询的账号列表, 每次最多20个
    */
   accounts: string[];
+}
+
+export interface GetChatroomMembersInfoResult extends GetChatroomMembersResult {}
+
+export interface DropResult {
+  data: any;
+  content: any;
 }

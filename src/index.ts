@@ -7,6 +7,9 @@ import {
   GetChatroomMembersOptions,
   GetChatroomMembersInfoOptions,
   NIMError,
+  DropResult,
+  GetChatroomMembersResult,
+  GetChatroomMembersInfoResult,
 } from './interface';
 
 const instances: Chatroom[] = [];
@@ -76,7 +79,7 @@ export default class Chatroom {
    * @param options
    */
   drop() {
-    return new Promise<{ data: any; content: any }>((res, rej) => {
+    return new Promise<DropResult>((res, rej) => {
       this._instance.drop({
         done: (error: NIMError, data, content) => {
           if (error) {
@@ -117,10 +120,10 @@ export default class Chatroom {
    * @param options
    */
   getChatroomMembers(options: GetChatroomMembersOptions) {
-    return new Promise<{ members: ChatroomMember[] }>((res, rej) => {
+    return new Promise<GetChatroomMembersResult>((res, rej) => {
       this._instance.getChatroomMembers({
         ...options,
-        done: (error: NIMError, data: { members: ChatroomMember[] }) => {
+        done: (error: NIMError, data: GetChatroomMembersResult) => {
           if (error) {
             rej(error);
           } else {
@@ -132,10 +135,10 @@ export default class Chatroom {
   }
 
   getChatroomMembersInfo(options: GetChatroomMembersInfoOptions) {
-    return new Promise<{ members: ChatroomMember[] }>((res, rej) => {
+    return new Promise<GetChatroomMembersInfoResult>((res, rej) => {
       this._instance.getChatroomMembersInfo({
         ...options,
-        done: (error: NIMError, data: { members: ChatroomMember[] }) => {
+        done: (error: NIMError, data: GetChatroomMembersInfoResult) => {
           if (error) {
             rej(error);
           } else {
