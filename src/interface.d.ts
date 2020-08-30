@@ -405,7 +405,8 @@ export interface GetChatroomMembersOptions {
   limit?: number;
 }
 
-export interface GetChatroomMembersResult {
+export interface GetChatroomMembersResult extends Pick<GetChatroomMembersOptions, 'time' | 'limit'> {
+  type: number;
   members: ChatroomMember[];
 }
 
@@ -416,9 +417,37 @@ export interface GetChatroomMembersInfoOptions {
   accounts: string[];
 }
 
-export interface GetChatroomMembersInfoResult extends GetChatroomMembersResult {}
+export interface GetChatroomMembersInfoResult extends GetChatroomMembersInfoOptions {
+  members: ChatroomMember[];
+}
 
 export interface DropResult {
   data: any;
   content: any;
+}
+
+export interface GetHistoryMsgsOptions {
+  /**
+   * 时间戳
+   */
+  timetag?: number;
+
+  /**
+   * limit, 默认 100
+   */
+  limit?: number;
+
+  /**
+   * 默认 false 表示从 timetag 开始往前查找历史消息
+   */
+  reverse?: boolean;
+
+  /**
+   * 消息类型列表，默认全部消息类型
+   */
+  msgTypes?: string[];
+}
+
+export interface GetHistoryMsgsResult extends GetHistoryMsgsOptions {
+  msgs: Message[];
 }

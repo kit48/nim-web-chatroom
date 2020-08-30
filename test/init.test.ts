@@ -10,26 +10,37 @@ export const baseInitOptions = {
 };
 
 const handleConnect = async (chatroom: Chatroom, data: any) => {
-  console.log('进入聊天室:');
-  console.log('chatroom', data.chatroom);
-  console.log('member', data.member);
+  console.log('进入聊天室:\n', 'chatroom', data.chatroom, '\n', 'member', data.member);
 
+  let desc = '获取聊天室成员';
   try {
     const data = await chatroom.getChatroomMembers({
       guest: false,
     });
-    console.log('获取聊天室成员成功', data);
+    console.log(`${desc}成功`, data);
   } catch (error) {
-    console.log('获取聊天室成员失败', error);
+    console.log(`${desc}失败`, error);
   }
 
+  desc = '获取聊天室成员信息';
   try {
     const data = await chatroom.getChatroomMembersInfo({
       accounts: [config.account],
     });
-    console.log('获取聊天室成员信息成功', data);
+    console.log(`${desc}成功`, data);
   } catch (error) {
-    console.log('获取聊天室成员信息失败', error);
+    console.log(`${desc}失败`, error);
+  }
+
+  desc = '获取聊天室历史';
+  try {
+    const data = await chatroom.getHistoryMsgs({
+      timetag: new Date().valueOf(),
+      limit: 5,
+    });
+    console.log(`${desc}成功`, data);
+  } catch (error) {
+    console.log(`${desc}失败`, error);
   }
 };
 
@@ -71,7 +82,6 @@ function listenChatroom() {
           }
         }
       },
-      // 消息
       onmsgs: (msgs) => {
         console.log('收到聊天室消息', msgs);
       },

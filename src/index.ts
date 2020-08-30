@@ -1,15 +1,15 @@
 import _Chatroom from './sdk';
 import {
   GetInstanceOptions,
-  Message,
   ChatroomInfo,
-  ChatroomMember,
   GetChatroomMembersOptions,
   GetChatroomMembersInfoOptions,
   NIMError,
   DropResult,
   GetChatroomMembersResult,
   GetChatroomMembersInfoResult,
+  GetHistoryMsgsOptions,
+  GetHistoryMsgsResult,
 } from './interface';
 
 const instances: Chatroom[] = [];
@@ -134,11 +134,38 @@ export default class Chatroom {
     });
   }
 
+  /**
+   * 获取聊天室成员信息
+   *
+   * @param options
+   */
   getChatroomMembersInfo(options: GetChatroomMembersInfoOptions) {
     return new Promise<GetChatroomMembersInfoResult>((res, rej) => {
       this._instance.getChatroomMembersInfo({
         ...options,
         done: (error: NIMError, data: GetChatroomMembersInfoResult) => {
+          if (error) {
+            rej(error);
+          } else {
+            res(data);
+          }
+        },
+      });
+    });
+  }
+
+  /**
+   * 获取聊天室历史消息
+   * - 获取从 timetag 对应的时间点往前的若干条数据
+   * - 不填 timetag 的话默认为服务器当前时间
+   *
+   * @param options
+   */
+  getHistoryMsgs(options: GetHistoryMsgsOptions) {
+    return new Promise<GetHistoryMsgsResult>((res, rej) => {
+      this._instance.getHistoryMsgs({
+        ...options,
+        done: (error: NIMError, data: GetHistoryMsgsResult) => {
           if (error) {
             rej(error);
           } else {
