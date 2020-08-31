@@ -35,8 +35,8 @@ const handleConnect = async (chatroom: Chatroom, data: any) => {
   desc = '获取聊天室历史';
   try {
     const data = await chatroom.getHistoryMsgs({
-      timetag: new Date().valueOf(),
-      limit: 5,
+      timetag: new Date().valueOf() - 24 * 60 * 60 * 1000,
+      limit: 10,
     });
     console.log(`${desc}成功`, data);
   } catch (error) {
